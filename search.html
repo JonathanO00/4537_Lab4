@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Search</title>
+    </head>
+    <body>
+        <label for="word">Word:</label><br>
+        <input type="text" id="word" name="word"><br>
+        <p id="error" style="color: red;"></p>
+
+        <button type="button" onclick="get()">Submit</button>
+
+        <div id="response"></div>
+
+        <script>
+            function get() {
+                const xhttp = new XMLHttpRequest();
+                let currentWord = document.getElementById("word").value;
+                let url = "https://jakobandjonny.a2hosted.com/COMP4537/labs/4/dictionary?word=" + currentWord;
+
+                if (currentWord.length == 0) {
+                    document.getElementById("response").innerHTML = "";
+                    document.getElementById("error").innerHTML = "Word field is blank!";
+                } else if (/\d/.test(currentWord) == true) {
+                    document.getElementById("response").innerHTML = "";
+                    document.getElementById("error").innerHTML = "Word field cannot contain numbers!";
+                } else {
+                    document.getElementById("error").innerHTML = "";
+
+                    xhttp.open("GET", url, true);
+                    xhttp.send();
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            document.getElementById("response").innerHTML = this.responseText;
+                        } else {
+                            document.getElementById("response").innerHTML = "Server-side error!";
+                        }
+                    };
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Store</title>
+    </head>
+    <body>
+        <label for="word">Word:</label><br>
+        <input type="text" id="word" name="word"><br>
+        <p id="wordError" style="color: red;"></p>
+
+        <label for="definition">Definition:</label><br>
+        <textarea rows="4" cols="50" id="definition" name="definition" form="storeForm"></textarea>
+        <p id="defError" style="color: red;"></p>
+
+        <button type="button" onclick="post()">Submit</button>
+
+        <div id="response"></div>
+
+        <script>
+            function post() {
+                const xhttp = new XMLHttpRequest();
+
+                let currentWord = document.getElementById("word").value;
+                let currentDef = document.getElementById("definition").value;
+
+                let url = "https://jakobandjonny.a2hosted.com/COMP4537/labs/4/dictionary?word=" + currentWord;
+
+                xhttp.open("POST", url, true);
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.send(JSON.stringify({
+                    "Word": currentWord,
+                    "Definition": currentDef
+                }));
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("response").innerHTML = this.responseText;
+                    } else {
+                        document.getElementById("response").innerHTML = "Server-side error!";
+                    }
+                };
+            }
+        </script>
+    </body>
+</html>
